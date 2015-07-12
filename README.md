@@ -1,0 +1,31 @@
+<p align="center"><img src="https://cloud.githubusercontent.com/assets/9503891/8640486/b71678e6-28fa-11e5-8596-5fd6e63896d1.png" alt="Volatile Compress" title="Volatile Compress"><br><br></p>
+
+Volatile Compress is a handler (middleware) for the Core.  
+If accepted by the client, it compress the server response with GZIP.
+
+Make sure to include the handler above any other handler that alter the response body.
+
+## Usage
+
+```Go
+package main
+
+import (
+	"net/http"
+
+	"github.com/volatile/compress"
+	"github.com/volatile/core"
+)
+
+func main() {
+	core.Use(compress.Handler)
+
+	core.Use(func(c *core.Context) {
+		c.Response = []byte("Hello, World!")
+	})
+
+	core.Run()
+}
+```
+
+[![GoDoc](https://godoc.org/github.com/volatile/compress?status.svg)](https://godoc.org/github.com/volatile/compress)
