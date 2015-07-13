@@ -1,5 +1,5 @@
 /*
-Package compress  is a handler for the Core.
+Package compress is a handler for the Core.
 If accepted by the client, it compress the server response with GZIP.
 
 Make sure to include the handler above any other handler that alter the response body.
