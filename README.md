@@ -11,7 +11,7 @@ Make sure to include the handler above any other handler that alter the response
 package main
 
 import (
-	"net/http"
+	"fmt"
 
 	"github.com/volatile/compress"
 	"github.com/volatile/core"
@@ -21,7 +21,7 @@ func main() {
 	core.Use(compress.Handler)
 
 	core.Use(func(c *core.Context) {
-		c.Response = []byte("Hello, World!")
+		fmt.Fprint(c.ResponseWriter, "Hello, World!")
 	})
 
 	core.Run()
