@@ -1,8 +1,8 @@
 /*
-Package compress is a handler used by the core package in the handlers stack.
+Package compress  is a handler for the Core.
 If accepted by the client, it compress the server response with GZIP.
 
-Be sure to put it on the first position, above all other handlers!
+Make sure to include the handler above any other handler that alter the response body.
 
 Example
 

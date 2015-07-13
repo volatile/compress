@@ -1,6 +1,6 @@
 <p align="center"><img src="https://cloud.githubusercontent.com/assets/9503891/8640486/b71678e6-28fa-11e5-8596-5fd6e63896d1.png" alt="Volatile Compress" title="Volatile Compress"><br><br></p>
 
-Volatile Compress is a handler (middleware) for the Core.  
+Volatile Compress is a handler for the [Core](https://github.com/volatile/core).  
 If accepted by the client, it compress the server response with GZIP.
 
 Make sure to include the handler above any other handler that alter the response body.
