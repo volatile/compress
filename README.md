@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	core.Use(compress.Handler)
+	compress.Use()
 
 	core.Use(func(c *core.Context) {
 		fmt.Fprint(c.ResponseWriter, "Hello, World!")

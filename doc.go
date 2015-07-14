@@ -18,7 +18,7 @@ Here is the classic "Hello, World!" example:
 	)
 
 	func main() {
-		core.Use(compress.Handler)
+		compress.Use()
 
 		core.Use(func(c *core.Context) {
 			c.Response = []byte("Hello, World!")
