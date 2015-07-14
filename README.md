@@ -5,6 +5,12 @@ If accepted by the client, it compress the server response with GZIP.
 
 Make sure to include the handler above any other handler that alter the response body.
 
+## Installation
+
+```Shell
+$ go get -u github.com/volatile/compress
+```
+
 ## Usage
 
 ```Go
