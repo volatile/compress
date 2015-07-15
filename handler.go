@@ -17,12 +17,12 @@ func Use() {
 			gzw := gzip.NewWriter(c.ResponseWriter)
 			defer gzw.Close()
 
-			// Pass a new ResponseWriter
+			// Pass a new ResponseWriter.
 			c.NextWriter(core.ResponseWriterBinder{
 				Writer:         gzw,
 				ResponseWriter: c.ResponseWriter,
 				BeforeWrite: func(b []byte) {
-					coreutil.SetContentType(c.ResponseWriter, b)
+					coreutil.SetDetectedContentType(c.ResponseWriter, b)
 				},
 			})
 		} else {
