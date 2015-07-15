@@ -2,10 +2,10 @@ package compress
 
 import (
 	"compress/gzip"
-	"net/http"
 	"strings"
 
 	"github.com/volatile/core"
+	"github.com/volatile/core/coreutil"
 )
 
 // Use tells the core to use this handler.
@@ -22,9 +22,7 @@ func Use() {
 				Writer:         gzw,
 				ResponseWriter: c.ResponseWriter,
 				BeforeWrite: func(b []byte) {
-					if len(c.ResponseWriter.Header().Get("Content-Type")) == 0 {
-						c.ResponseWriter.Header().Set("Content-Type", http.DetectContentType(b))
-					}
+					coreutil.SetContentType(c.ResponseWriter, b)
 				},
 			})
 		} else {
