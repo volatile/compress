@@ -4,14 +4,15 @@ If accepted by the client, it compress the server response with GZIP.
 
 Make sure to include the handler above any other handler that alter the response body.
 
-Example
+Global usage
 
-Here is the classic "Hello, World!" example:
+compress.Use() adds a handler to the Core so all the responses are compressed.
+Make sure to include the handler above any other handler that alter the response body.
 
 	package main
 
 	import (
-		"net/http"
+		"fmt"
 
 		"github.com/volatile/compress"
 		"github.com/volatile/core"
@@ -21,7 +22,29 @@ Here is the classic "Hello, World!" example:
 		compress.Use()
 
 		core.Use(func(c *core.Context) {
-			c.Response = []byte("Hello, World!")
+			fmt.Fprint(c.ResponseWriter, "Hello, World!")
+		})
+
+		core.Run()
+	}
+
+Local usage
+
+compress.LocalUse(*core.Context, func(c *core.Context)) can be used to compress the response inside a specific handler.
+Make sure to not use a local compress if the global handler is set.
+
+	package main
+
+	import (
+		"fmt"
+
+		"github.com/volatile/compress"
+		"github.com/volatile/core"
+	)
+
+	func main() {
+		compress.LocalUse(c, func(c *core.Context) {
+			fmt.Fprint(c.ResponseWriter, "Hello, World!")
 		})
 
 		core.Run()
