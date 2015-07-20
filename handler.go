@@ -2,6 +2,7 @@ package compress
 
 import (
 	"compress/gzip"
+	"net/http"
 	"strings"
 
 	"github.com/volatile/core"
@@ -11,16 +12,19 @@ import (
 // Use tells the core to use this handler.
 func Use() {
 	core.Use(func(c *core.Context) {
-		gzw, c := setWriter(c)
+		var gzw *gzip.Writer
+		gzw, c = setWriter(c)
 		c.Next()
 		gzw.Close()
 	})
 }
 
 // LocalUse allows to compress locally, inside a single handler.
-func LocalUse(c *core.Context, handler func(c *core.Context)) {
-	gzw, c := setWriter(c)
-	handler(c)
+// Only the ResponseWriter is transmitted to avoid errors like calling c.Next() and risk to use multiple compressors over the response.
+func LocalUse(c *core.Context, wf func(http.ResponseWriter)) {
+	var gzw *gzip.Writer
+	gzw, c = setWriter(c)
+	wf(c.ResponseWriter)
 	gzw.Close()
 }
 
