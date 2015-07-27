@@ -22,7 +22,7 @@ func Use() {
 				Writer:         gzw,
 				ResponseWriter: c.ResponseWriter,
 				BeforeWrite: func(b []byte) {
-					coreutil.SetDetectedContentType(c.ResponseWriter, b)
+					coreutil.SetDetectedContentType(c, b)
 				},
 			}
 		}
