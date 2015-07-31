@@ -15,7 +15,7 @@ type compressWriter struct {
 	http.ResponseWriter
 }
 
-// Use tells the core to compress all responses.
+// Use adds a handler that compress all the compressible responses.
 func Use() {
 	core.Use(func(c *core.Context) {
 		if strings.Contains(c.Request.Header.Get("Accept-Encoding"), "gzip") && len(c.Request.Header.Get("Sec-WebSocket-Key")) == 0 {
@@ -38,7 +38,7 @@ func (cw compressWriter) Write(b []byte) (int, error) {
 	return cw.ResponseWriter.Write(b)
 }
 
-// WriteHeader set the compressing headers, but only if the "Content-Type" defines a compressible format.
+// WriteHeader sets the compressing headers, but only if the Content-Type header defines a compressible format.
 // After that, it calls the real WriteHeader.
 func (cw compressWriter) WriteHeader(status int) {
 	if compressibleContentType(cw.ResponseWriter) {
@@ -47,6 +47,8 @@ func (cw compressWriter) WriteHeader(status int) {
 	cw.ResponseWriter.WriteHeader(status)
 }
 
+// setGZIPHeaders sets the Content-Encoding header.
+// Because the compressed content will have a new size, it also removes the Content-Length header as it could have been set by another handler downstream.
 func setGZIPHeaders(w http.ResponseWriter) {
 	w.Header().Set("Content-Encoding", "gzip")
 	w.Header().Del("Content-Length")
