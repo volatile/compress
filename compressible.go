@@ -29,8 +29,6 @@ var uncompresibleTypes = map[string]struct{}{
 // compressibleContentType tells if the content type must be compressed.
 // This avoids compressing already compressed content, or content without a declared type.
 func compressibleContentType(w http.ResponseWriter) bool {
-	if _, ok := uncompresibleTypes[strings.ToLower(w.Header().Get("Content-Type"))]; ok {
-		return false
-	}
-	return true
+	_, ok := uncompresibleTypes[strings.ToLower(w.Header().Get("Content-Type"))]
+	return !ok
 }
