@@ -27,6 +27,8 @@ func Use() {
 	})
 }
 
+// WriteHeader sets the compressing headers and writes into the GZIP, but only if the Content-Type header defines a compressible format.
+// Otherwise, it calls the original Write method.
 func (cw compressWriter) Write(b []byte) (int, error) {
 	coreutil.SetDetectedContentType(cw.ResponseWriter, b) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
 
@@ -39,7 +41,7 @@ func (cw compressWriter) Write(b []byte) (int, error) {
 }
 
 // WriteHeader sets the compressing headers, but only if the Content-Type header defines a compressible format.
-// After that, it calls the real WriteHeader.
+// Finally, it calls the original WriteHeader method.
 func (cw compressWriter) WriteHeader(status int) {
 	if compressibleContentType(cw.ResponseWriter.Header().Get("Content-Type")) {
 		setGZIPHeaders(cw.ResponseWriter)
@@ -48,7 +50,7 @@ func (cw compressWriter) WriteHeader(status int) {
 }
 
 // setGZIPHeaders sets the Content-Encoding header.
-// Because the compressed content will have a new size, it also removes the Content-Length header as it could have been set by another handler downstream.
+// Because the compressed content will have a new size, it also removes the Content-Length header as it could have been set downstream by another handler.
 func setGZIPHeaders(w http.ResponseWriter) {
 	w.Header().Set("Content-Encoding", "gzip")
 	w.Header().Del("Content-Length")
