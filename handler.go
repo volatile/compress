@@ -30,7 +30,7 @@ func Use() {
 func (cw compressWriter) Write(b []byte) (int, error) {
 	coreutil.SetDetectedContentType(cw.ResponseWriter, b) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
 
-	if compressibleContentType(cw.ResponseWriter) {
+	if compressibleContentType(cw.ResponseWriter.Header().Get("Content-Type")) {
 		setGZIPHeaders(cw.ResponseWriter) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
 		return cw.Writer.Write(b)
 	}
@@ -41,7 +41,7 @@ func (cw compressWriter) Write(b []byte) (int, error) {
 // WriteHeader sets the compressing headers, but only if the Content-Type header defines a compressible format.
 // After that, it calls the real WriteHeader.
 func (cw compressWriter) WriteHeader(status int) {
-	if compressibleContentType(cw.ResponseWriter) {
+	if compressibleContentType(cw.ResponseWriter.Header().Get("Content-Type")) {
 		setGZIPHeaders(cw.ResponseWriter)
 	}
 	cw.ResponseWriter.WriteHeader(status)

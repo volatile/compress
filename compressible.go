@@ -1,9 +1,6 @@
 package compress
 
-import (
-	"net/http"
-	"strings"
-)
+import "strings"
 
 var uncompresibleTypes = map[string]struct{}{
 	"":                             {},
@@ -26,9 +23,8 @@ var uncompresibleTypes = map[string]struct{}{
 	"audio/wav":                    {},
 }
 
-// compressibleContentType tells if the content type must be compressed.
-// This avoids compressing already compressed content, or content without a declared type.
-func compressibleContentType(w http.ResponseWriter) bool {
-	_, ok := uncompresibleTypes[strings.ToLower(w.Header().Get("Content-Type"))]
+// compressibleContentType indicates whether the content of ct type can be compressed.
+func compressibleContentType(ct string) bool {
+	_, ok := uncompresibleTypes[strings.ToLower(ct)]
 	return !ok
 }
