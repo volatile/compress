@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/volatile/core"
-	"github.com/volatile/core/coreutil"
+	"github.com/volatile/core/httputil"
 )
 
 type compressWriter struct {
@@ -30,7 +30,7 @@ func Use() {
 // WriteHeader sets the compressing headers and writes into the GZIP, but only if the Content-Type header defines a compressible format.
 // Otherwise, it calls the original Write method.
 func (cw compressWriter) Write(b []byte) (int, error) {
-	coreutil.SetDetectedContentType(cw.ResponseWriter, b) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
+	httputil.SetDetectedContentType(cw.ResponseWriter, b) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
 
 	if compressibleContentType(cw.ResponseWriter.Header().Get("Content-Type")) {
 		setGZIPHeaders(cw.ResponseWriter) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
