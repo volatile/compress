@@ -2,7 +2,7 @@ package compress
 
 import "strings"
 
-var uncompresibleTypes = map[string]struct{}{
+var incompressibleTypes = map[string]struct{}{
 	"":                             {},
 	"application/pdf":              {},
 	"application/x-gzip":           {},
@@ -25,6 +25,6 @@ var uncompresibleTypes = map[string]struct{}{
 
 // compressibleContentType indicates whether the content of ct type can be compressed.
 func compressibleContentType(ct string) bool {
-	_, ok := uncompresibleTypes[strings.ToLower(ct)]
+	_, ok := incompressibleTypes[strings.ToLower(ct)]
 	return !ok
 }

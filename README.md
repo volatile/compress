@@ -11,7 +11,7 @@ Make sure to include the handler above any other handler that alter the response
 ## Installation
 
 ```Shell
-$ go get -u github.com/volatile/compress
+$ go get github.com/volatile/compress
 ```
 
 ## Usage
