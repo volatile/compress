@@ -14,7 +14,7 @@ Make sure to include the handler above any other handler that alter the response
 $ go get github.com/volatile/compress
 ```
 
-## Usage
+## Usage [![GoDoc](https://godoc.org/github.com/volatile/compress?status.svg)](https://godoc.org/github.com/volatile/compress)
 
 ```Go
 package main
@@ -36,5 +36,3 @@ func main() {
 	core.Run()
 }
 ```
-
-[![GoDoc](https://godoc.org/github.com/volatile/compress?status.svg)](https://godoc.org/github.com/volatile/compress)
