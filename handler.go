@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"sync"
 
 	"github.com/volatile/core"
 	"github.com/volatile/core/httputil"
@@ -15,12 +16,22 @@ type compressWriter struct {
 	http.ResponseWriter
 }
 
+// compressors is a pool containing previously used writers.
+// It creates new ones if run out.
+var compressors = sync.Pool{New: func() interface{} {
+	return gzip.NewWriter(nil)
+}}
+
 // Use adds a handler that compress all the compressible responses.
 func Use() {
 	core.Use(func(c *core.Context) {
 		if strings.Contains(c.Request.Header.Get("Accept-Encoding"), "gzip") && len(c.Request.Header.Get("Sec-WebSocket-Key")) == 0 {
-			gzw := gzip.NewWriter(c.ResponseWriter)
+			gzw := compressors.Get().(*gzip.Writer) // Get a writer from the pool.
+			defer compressors.Put(gzw)              // When done, put the writer back in to the pool.
+
+			gzw.Reset(c.ResponseWriter)
 			defer gzw.Close()
+
 			c.ResponseWriter = compressWriter{gzw, c.ResponseWriter} // Set the new ResponseWriter.
 		}
 		c.Next()
