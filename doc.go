@@ -7,6 +7,12 @@ Trying to GZIP them not only wastes CPU but can potentially increase file sizes.
 
 Make sure to include the handler above any other handler that alter the response body.
 
+Installation
+
+In the terminal:
+
+	$ go get github.com/volatile/compress
+
 Usage
 
 Example:
