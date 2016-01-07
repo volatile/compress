@@ -2,7 +2,6 @@ package compress
 
 import (
 	"compress/gzip"
-	"io"
 	"net/http"
 	"strings"
 	"sync"
@@ -12,7 +11,6 @@ import (
 )
 
 type compressWriter struct {
-	io.Writer
 	http.ResponseWriter
 }
 
@@ -26,13 +24,9 @@ var compressors = sync.Pool{New: func() interface{} {
 func Use() {
 	core.Use(func(c *core.Context) {
 		if strings.Contains(c.Request.Header.Get("Accept-Encoding"), "gzip") && len(c.Request.Header.Get("Sec-WebSocket-Key")) == 0 {
-			gzw := compressors.Get().(*gzip.Writer) // Get a writer from the pool.
-			defer compressors.Put(gzw)              // When done, put the writer back in to the pool.
-
-			gzw.Reset(c.ResponseWriter)
-			defer gzw.Close()
-
-			c.ResponseWriter = compressWriter{gzw, c.ResponseWriter} // Set the new ResponseWriter.
+			originalRW := c.ResponseWriter                   // Keep the original ResponseWriter.
+			c.ResponseWriter = compressWriter{originalRW}    // Set the a ResponseWriter.
+			defer func() { c.ResponseWriter = originalRW }() // Put back the original ResponseWriter for upstream handlers and core.PanicHandler.
 		}
 		c.Next()
 	})
@@ -45,7 +39,13 @@ func (cw compressWriter) Write(b []byte) (int, error) {
 
 	if compressibleContentType(cw.ResponseWriter.Header().Get("Content-Type")) {
 		setGZIPHeaders(cw.ResponseWriter) // If WriteHeader has already been called, this line has no effect. But most of the time, it's not the case.
-		return cw.Writer.Write(b)
+
+		gzw := compressors.Get().(*gzip.Writer) // Get a writer from the pool.
+		defer compressors.Put(gzw)              // When done, put the writer back in to the pool.
+
+		gzw.Reset(cw.ResponseWriter)
+		defer gzw.Close()
+		return gzw.Write(b)
 	}
 
 	return cw.ResponseWriter.Write(b)
