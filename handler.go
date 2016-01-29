@@ -22,7 +22,7 @@ var compressors = sync.Pool{New: func() interface{} {
 	return gzip.NewWriter(nil)
 }}
 
-// Use adds a handler to the default handlers stack.
+// Use adds the handler to the default handlers stack.
 // It compress all the compressible responses.
 func Use() {
 	core.Use(func(c *core.Context) {
