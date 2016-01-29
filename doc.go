@@ -7,7 +7,7 @@ Trying to GZIP them not only wastes CPU but can potentially increase file sizes.
 
 Usage
 
-Use adds a handler to the default handlers stack:
+Use adds the handler to the default handlers stack:
 
 	compress.Use()
 
