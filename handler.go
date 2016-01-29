@@ -23,6 +23,7 @@ var compressors = sync.Pool{New: func() interface{} {
 }}
 
 // Use adds a handler to the default handlers stack.
+// It compress all the compressible responses.
 func Use() {
 	core.Use(func(c *core.Context) {
 		if strings.Contains(c.Request.Header.Get("Accept-Encoding"), "gzip") && len(c.Request.Header.Get("Sec-WebSocket-Key")) == 0 {
