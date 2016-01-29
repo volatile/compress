@@ -1,39 +1,16 @@
 /*
-Package compress is a handler for the Core (https://github.com/volatile/core).
+Package compress is a handler for the core (https://godoc.org/github.com/volatile/core).
 If accepted by the client, it compress the server response with GZIP.
 
 Unlike almost all other compressing packages, it takes care to not handle contents that are already compressed (like JPEG, MPEG or PDF).
 Trying to GZIP them not only wastes CPU but can potentially increase file sizes.
 
-Make sure to include the handler above any other handler that alter the response body.
-
-Installation
-
-In the terminal:
-
-	$ go get github.com/volatile/compress
-
 Usage
 
-Example:
+Use adds a handler to the default handlers stack:
 
-	package main
+	compress.Use()
 
-	import (
-		"fmt"
-
-		"github.com/volatile/compress"
-		"github.com/volatile/core"
-	)
-
-	func main() {
-		compress.Use()
-
-		core.Use(func(c *core.Context) {
-			fmt.Fprint(c.ResponseWriter, "Hello, World!")
-		})
-
-		core.Run()
-	}
+Make sure to include the handler above any other handler that alter the response body.
 */
 package compress
