@@ -3,8 +3,10 @@ package compress
 import "strings"
 
 var incompressibleTypes = map[string]struct{}{
-	"":                             {},
+	"": {},
+	"application/octet-stream":     {},
 	"application/pdf":              {},
+	"application/x-font-woff":      {},
 	"application/x-gzip":           {},
 	"application/x-rar-compressed": {},
 	"application/zip":              {},
