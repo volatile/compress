@@ -1,15 +1,15 @@
 /*
 Package compress is a handler for the core (https://godoc.org/github.com/volatile/core).
-If accepted by the client, it compress the server response with GZIP.
+It provides a clever gzip compressing handler.
 
-Unlike almost all other compressing packages, it takes care to not handle contents that are already compressed (like JPEG, MPEG or PDF).
-Trying to GZIP them not only wastes CPU but can potentially increase file sizes.
+It takes care to not handle small contents, or contents that are already compressed (like JPEG, MPEG or PDF).
+Trying to gzip them not only wastes CPU but can potentially increase the response size.
 
 Usage
 
 Use adds the handler to the default handlers stack:
 	compress.Use()
 
-Make sure to include the handler above any other handler that alter the response body.
+Make sure to include this handler above any other handler that alter the response body.
 */
 package compress
